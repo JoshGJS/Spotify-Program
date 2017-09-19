@@ -2,16 +2,16 @@
 import ast
 
 
-
+# Example of a function
 def main():
     print("")
     print("Would you like to:")
     print("a) Sign in")
     print("b) Sign up")
     print("c) End program")
-    answer = input("> ")
+    answer = input("> ") # Example of a variable
 
-
+    # Example of an if else statement
     if (answer == "a"):
         login()
         
@@ -61,7 +61,7 @@ def register():
                         userList[2].append(newEmail)
                         userList[3].append(newPassword)
 
-                        
+                        # Example of writing to a text file
                         userAdd = open("users.txt","w")
                         userAdd.write(str(userList))
                         userAdd.close()
@@ -120,7 +120,8 @@ def register():
             if (newUser == "exit"):
                 main()
         
-            elif (newUser in userList):
+            elif (newUser in userList[1]
+                  ):
                 print("Unfortunately, that username already exists.")
                 print("Please try another username.")
                 registerUser()
@@ -151,7 +152,8 @@ def register():
 
 
 def login():
-    userList = open("users.txt","r").read()
+    # 'users.txt' contains a multi-dimensional array
+    userList = open("users.txt","r").read() # Example of reading from a text file
     userList = ast.literal_eval(userList)
 
     print("")
@@ -238,10 +240,15 @@ def songMain():
         print("Returning to main menu.")
         main()
 
+    else:
+        print("Invalid input.")
+        songMain()
+
 
 
 def listSongs():
-    print("")
+    songList = open("songs.txt","r").read()
+    print(len(songList))
 
 
 
