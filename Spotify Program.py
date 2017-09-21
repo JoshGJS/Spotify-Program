@@ -20,6 +20,11 @@ def main():
 
     elif (answer == "c"):
         pass
+
+    elif (answer == "x"):
+        global userLogin
+        userLogin = "jigglyJ"
+        songMain()
         
     else:
         print("Invalid input.")
@@ -158,7 +163,7 @@ def login():
 
     print("")
     print("Please enter your sign in information.")
-    global userLogin
+    global userLogin # Example of a global variable
     userLogin = input("Enter username:")
     passwordLogin = input("Enter Password:")
     if (userLogin in userList[1]):
@@ -247,24 +252,150 @@ def songMain():
 
 
 def listSongs():
+    print("")
+    print("Listing songs:")
+    print("")
+    print("")
+
     songList = open("songs.txt","r").read()
-    print(len(songList))
+    songList = ast.literal_eval(songList)
+    
+    songListLength = len(songList)
+    songListIndex = 0
+    
+    
+    while (songListIndex < songListLength):
+        songIndex = 0
+        print("| Song: " + str(songList[songListIndex][songIndex]),end=" | ")
+        songIndex = songIndex + 1
+
+        print("Artist: " + str(songList[songListIndex][songIndex]),end=" | ")
+        songIndex = songIndex + 1
+
+        print("Genre: " + str(songList[songListIndex][songIndex]),end=" | ")
+        songIndex = songIndex + 1
+
+        print("Album: " + str(songList[songListIndex][songIndex]),end=" | ")
+        songIndex = songIndex + 1
+
+        print("Length: " + str(songList[songListIndex][songIndex]),end=" | ")
+
+        songListIndex = songListIndex + 1
+
+        print("")
+        
+
+    
+    songMain()
 
 
 
 def sortSongs():
+    songList = open("songs.txt","r").read()
+    songList = ast.literal_eval(songList)
+    
+    songListLength = len(songList)
+    songListIndex = 0
+    
     print("")
+    print("Do you want to list songs by:")
+    print("a) Name")
+    print("b) Artist")
+    print("c) Genre")
+    print("d) Album")
+    print("e) Length")
+    answer = input("> ")
 
+    if (answer == "a"):
+        print("")
+
+        # Name sort end
+
+    elif (answer == "b"):
+        sortList = []
+
+        while (songListIndex < songListLength):
+            addList = []
+            addList.append(songList[songListIndex][1])
+            addList.append(songList[songListIndex][0])
+            sortList.append(addList)
+
+            songListIndex = songListIndex + 1
+
+        print("Do you want to:")
+        print("a) Sort from A - Z")
+        print("b) Sort from Z - A")
+        answer = input("> ")
+        if (answer == "a"):
+            sortList = sorted(sortList)
+            
+
+        elif (answer == "b"):
+            sortList = sorted(sortList, reverse = True)
+
+        
+
+        # Artist sort end
+
+    elif (answer == "c"):
+        print("")
+
+        # Genre sort end
+
+    elif (answer == "d"):
+        print("")
+
+        # Album sort end
+
+    elif (answer == "e"):
+        print("")
+
+        # Length sort end
+
+    else:
+        print("Invalid entry.")
+        print("Would you like to try again?")
+        print(" a) Yes")
+        print(" b) No")
+        answer = input("> ")
+
+        if (answer == "a"):
+            sortSongs()
+                
+        elif (answer == "b"):
+            songMain()
+                
+        else:
+            print("Invalid entry.")
+            print("Returning to main menu.")
+            songMain()
+
+    
+    songMain()
 
 
 def playlist():
     print("")
 
 
+    """
+
+    songList = open("songs.txt","r").read()
+    songList = ast.literal_eval(songList)
+    
+    songListLength = len(songList)
+
+    
+    if ("The Black Hit Of Space" in songList[0]):
+        print(songList[0].index("The Black Hit Of Space"))
+    
+    """
+    songMain()
+
 
 def editAccount():
     print("")
-
+    songMain()
 
 
 print("")
