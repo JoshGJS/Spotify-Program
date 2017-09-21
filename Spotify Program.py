@@ -322,16 +322,96 @@ def sortSongs():
 
             songListIndex = songListIndex + 1
 
+
         print("Do you want to:")
         print("a) Sort from A - Z")
         print("b) Sort from Z - A")
         answer = input("> ")
+        
         if (answer == "a"):
             sortList = sorted(sortList)
             
 
         elif (answer == "b"):
             sortList = sorted(sortList, reverse = True)
+
+        else:
+            print("Invalid entry.")
+            print("Would you like to try again?")
+            print(" a) Yes")
+            print(" b) No")
+            answer = input("> ")
+
+            if (answer == "a"):
+                sortSongs()
+                    
+            elif (answer == "b"):
+                songMain()
+                    
+            else:
+                print("Invalid entry.")
+                print("Returning to menu.")
+                songMain()
+
+        
+        songListIndex = 0
+        findIndex = 0
+        sortedList = []
+
+
+        while (songListIndex < songListLength):
+
+            findIndex = 0
+            listFound = False
+            restart = False
+
+            while (restart == False):
+                while (listFound == False):
+                    if (sortList[findIndex][1] in songList[songListIndex]):
+                        sortedListAdd = []
+                        songIndex = 0
+                        
+                        sortedListAdd.append(songList[findIndex][songIndex])
+                        songIndex = songIndex + 1
+                        sortedListAdd.append(songList[findIndex][songIndex])
+                        songIndex = songIndex + 1
+                        sortedListAdd.append(songList[findIndex][songIndex])
+                        songIndex = songIndex + 1
+                        sortedListAdd.append(songList[findIndex][songIndex])
+                        songIndex = songIndex + 1
+                        sortedListAdd.append(songList[findIndex][songIndex])
+
+                        sortedList.append(sortedListAdd)
+
+                        listFound = True
+                        restart = True
+                        songListIndex = songListIndex + 1
+
+                    else:
+                        findIndex = findIndex + 1
+
+        songListIndex = 0
+
+        while (songListIndex < songListLength):
+            songIndex = 0
+            print("| Song: " + str(sortedList[songListIndex][songIndex]),end=" | ")
+            songIndex = songIndex + 1
+
+            print("Artist: " + str(sortedList[songListIndex][songIndex]),end=" | ")
+            songIndex = songIndex + 1
+
+            print("Genre: " + str(sortedList[songListIndex][songIndex]),end=" | ")
+            songIndex = songIndex + 1
+
+            print("Album: " + str(sortedList[songListIndex][songIndex]),end=" | ")
+            songIndex = songIndex + 1
+
+            print("Length: " + str(sortedList[songListIndex][songIndex]),end=" | ")
+
+            songListIndex = songListIndex + 1
+
+            print("")
+                    
 
         
 
@@ -367,7 +447,7 @@ def sortSongs():
                 
         else:
             print("Invalid entry.")
-            print("Returning to main menu.")
+            print("Returning to menu.")
             songMain()
 
     
