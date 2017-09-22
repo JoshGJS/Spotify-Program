@@ -1,5 +1,6 @@
 
 import ast
+import sqlite3
 
 
 # Example of a function
@@ -358,6 +359,7 @@ def sortSongs():
         findIndex = 0
         sortedList = []
 
+        print(sortList)
 
         while (songListIndex < songListLength):
 
@@ -391,6 +393,8 @@ def sortSongs():
                         findIndex = findIndex + 1
 
         songListIndex = 0
+
+        print(sortedList)
 
         while (songListIndex < songListLength):
             songIndex = 0
