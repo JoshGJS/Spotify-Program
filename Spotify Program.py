@@ -524,12 +524,28 @@ def sortSongs():
 
 
 def playlist():
+
+    print("")
+    print("Do you want to:")
+    print("a) Create a playlist")
+    print("b) Edit a playlist")
+    print("c) View a playlist")
+    print("d) Return to menu")
+    answer = input("> ")
+    
+    
+        
+    
+
+
+def playlistCreate():
     print("")
     print("Enter playlist name:")
     playlistName = input("> ")
 
     repeat = True
     songIndex = 0
+    playlistAdd = [""] * 25
 
     print("")
     print("While adding songs to the playlist")
@@ -537,15 +553,24 @@ def playlist():
     print("or type \'finish\' if you have finished entering")
     print("songs into the playlist.")
     
-    while (repeat = True):
+    while (repeat == True):
         print("")
         print("Input song name (case sensitive):")
-        songName[songIndex] = input("> ")
+        playlistAdd[songIndex] = input("> ")
 
-        if cursor.execute("SELECT songName FROM songs WHERE songName = ?",(songName[songIndex]
-        
-    
-    songMain()
+        if cursor.execute("SELECT songName FROM songs WHERE songName = ?",(playlistAdd[songIndex],)):
+            if (playlistAdd[songIndex] == "exit"):
+                songMain()
+
+            elif (playlistAdd[songIndex] == 'finish'):
+                repeat = False
+
+            elif (len(playlistAdd) >= 25):
+                print("Song limit reached.")
+                repeat = False
+
+            else:
+                songIndex = songIndex + 1
 
 
 def editAccount():
