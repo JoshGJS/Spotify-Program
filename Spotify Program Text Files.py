@@ -256,18 +256,34 @@ def listSongs():
     print("")
     print("Listing songs:")
     print("")
+    print("")
 
-    cursor.execute('SELECT songName, artistName, genre, album, length FROM songs')
+    songList = open("songs.txt","r").read()
+    songList = ast.literal_eval(songList)
+    
+    songListLength = len(songList)
+    songListIndex = 0
+    
+    
+    while (songListIndex < songListLength):
+        songIndex = 0
+        print("| Song: " + str(songList[songListIndex][songIndex]),end=" | ")
+        songIndex = songIndex + 1
 
-    for row in cursor:
-        print("| Song: ", row[0], end=" | ")
-        print("Artist: ", row[1], end=" | ")
-        print("Genre: ", row[2], end=" | ")
-        print("Album: ", row[3], end=" | ")
-        print("Length: ", row[4], " |")
-    
-    
-    
+        print("Artist: " + str(songList[songListIndex][songIndex]),end=" | ")
+        songIndex = songIndex + 1
+
+        print("Genre: " + str(songList[songListIndex][songIndex]),end=" | ")
+        songIndex = songIndex + 1
+
+        print("Album: " + str(songList[songListIndex][songIndex]),end=" | ")
+        songIndex = songIndex + 1
+
+        print("Length: " + str(songList[songListIndex][songIndex]),end=" | ")
+
+        songListIndex = songListIndex + 1
+
+        print("")
         
 
     
@@ -292,59 +308,33 @@ def sortSongs():
     answer = input("> ")
 
     if (answer == "a"):
-        print("Do you want to:")
-        print("a) Sort from A - Z")
-        print("b) Sort from Z - A")
-        answer2 = input("> ")
-        
-        if (answer2 == "a"):
-            cursor.execute('SELECT songName, artistName, genre, album, length FROM songs ORDER BY songName ASC')
-            
-
-        elif (answer2 == "b"):
-            cursor.execute('SELECT songName, artistName, genre, album, length FROM songs ORDER BY songName DESC')
-            
-
-        else:
-            print("Invalid entry.")
-            print("Would you like to try again?")
-            print(" a) Yes")
-            print(" b) No")
-            answer = input("> ")
-
-            if (answer == "a"):
-                sortSongs()
-                    
-            elif (answer == "b"):
-                songMain()
-                    
-            else:
-                print("Invalid entry.")
-                print("Returning to menu.")
-                songMain()
-
-        for row in cursor:
-            print("| Song: ", row[0], end=" | ")
-            print("Artist: ", row[1], end=" | ")
-            print("Genre: ", row[2], end=" | ")
-            print("Album: ", row[3], end=" | ")
-            print("Length: ", row[4], " |")
+        print("")
 
         # Name sort end
 
     elif (answer == "b"):
+        sortList = []
+
+        while (songListIndex < songListLength):
+            addList = []
+            addList.append(songList[songListIndex][1])
+            addList.append(songList[songListIndex][0])
+            sortList.append(addList)
+
+            songListIndex = songListIndex + 1
+
+
         print("Do you want to:")
         print("a) Sort from A - Z")
         print("b) Sort from Z - A")
-        answer2 = input("> ")
+        answer = input("> ")
         
-        if (answer2 == "a"):
-            cursor.execute('SELECT songName, artistName, genre, album, length FROM songs ORDER BY artistName, album ASC')
+        if (answer == "a"):
+            sortList = sorted(sortList)
             
 
-        elif (answer2 == "b"):
-            cursor.execute('SELECT songName, artistName, genre, album, length FROM songs ORDER BY artistName, album DESC')
-            
+        elif (answer == "b"):
+            sortList = sorted(sortList, reverse = True)
 
         else:
             print("Invalid entry.")
@@ -364,14 +354,67 @@ def sortSongs():
                 print("Returning to menu.")
                 songMain()
 
-        for row in cursor:
-            print("| Song: ", row[0], end=" | ")
-            print("Artist: ", row[1], end=" | ")
-            print("Genre: ", row[2], end=" | ")
-            print("Album: ", row[3], end=" | ")
-            print("Length: ", row[4], " |")
-            
         
+        songListIndex = 0
+        findIndex = 0
+        sortedList = []
+
+        print(sortList)
+
+        while (songListIndex < songListLength):
+
+            findIndex = 0
+            listFound = False
+            restart = False
+
+            while (restart == False):
+                while (listFound == False):
+                    if (sortList[findIndex][1] in songList[songListIndex]):
+                        sortedListAdd = []
+                        songIndex = 0
+                        
+                        sortedListAdd.append(songList[findIndex][songIndex])
+                        songIndex = songIndex + 1
+                        sortedListAdd.append(songList[findIndex][songIndex])
+                        songIndex = songIndex + 1
+                        sortedListAdd.append(songList[findIndex][songIndex])
+                        songIndex = songIndex + 1
+                        sortedListAdd.append(songList[findIndex][songIndex])
+                        songIndex = songIndex + 1
+                        sortedListAdd.append(songList[findIndex][songIndex])
+
+                        sortedList.append(sortedListAdd)
+
+                        listFound = True
+                        restart = True
+                        songListIndex = songListIndex + 1
+
+                    else:
+                        findIndex = findIndex + 1
+
+        songListIndex = 0
+
+        print(sortedList)
+
+        while (songListIndex < songListLength):
+            songIndex = 0
+            print("| Song: " + str(sortedList[songListIndex][songIndex]),end=" | ")
+            songIndex = songIndex + 1
+
+            print("Artist: " + str(sortedList[songListIndex][songIndex]),end=" | ")
+            songIndex = songIndex + 1
+
+            print("Genre: " + str(sortedList[songListIndex][songIndex]),end=" | ")
+            songIndex = songIndex + 1
+
+            print("Album: " + str(sortedList[songListIndex][songIndex]),end=" | ")
+            songIndex = songIndex + 1
+
+            print("Length: " + str(sortedList[songListIndex][songIndex]),end=" | ")
+
+            songListIndex = songListIndex + 1
+
+            print("")
                     
 
         
@@ -379,125 +422,17 @@ def sortSongs():
         # Artist sort end
 
     elif (answer == "c"):
-        print("Do you want to:")
-        print("a) Sort from A - Z")
-        print("b) Sort from Z - A")
-        answer2 = input("> ")
-        
-        if (answer2 == "a"):
-            cursor.execute('SELECT songName, artistName, genre, album, length FROM songs ORDER BY genre, artistName, album ASC')
-            
-
-        elif (answer2 == "b"):
-            cursor.execute('SELECT songName, artistName, genre, album, length FROM songs ORDER BY genre, artistName, album DESC')
-            
-
-        else:
-            print("Invalid entry.")
-            print("Would you like to try again?")
-            print(" a) Yes")
-            print(" b) No")
-            answer = input("> ")
-
-            if (answer == "a"):
-                sortSongs()
-                    
-            elif (answer == "b"):
-                songMain()
-                    
-            else:
-                print("Invalid entry.")
-                print("Returning to menu.")
-                songMain()
-
-        for row in cursor:
-            print("| Song: ", row[0], end=" | ")
-            print("Artist: ", row[1], end=" | ")
-            print("Genre: ", row[2], end=" | ")
-            print("Album: ", row[3], end=" | ")
-            print("Length: ", row[4], " |")
+        print("")
 
         # Genre sort end
 
     elif (answer == "d"):
-        print("Do you want to:")
-        print("a) Sort from A - Z")
-        print("b) Sort from Z - A")
-        answer2 = input("> ")
-        
-        if (answer2 == "a"):
-            cursor.execute('SELECT songName, artistName, genre, album, length FROM songs ORDER BY album ASC')
-            
-
-        elif (answer2 == "b"):
-            cursor.execute('SELECT songName, artistName, genre, album, length FROM songs ORDER BY album DESC')
-            
-
-        else:
-            print("Invalid entry.")
-            print("Would you like to try again?")
-            print(" a) Yes")
-            print(" b) No")
-            answer = input("> ")
-
-            if (answer == "a"):
-                sortSongs()
-                    
-            elif (answer == "b"):
-                songMain()
-                    
-            else:
-                print("Invalid entry.")
-                print("Returning to menu.")
-                songMain()
-
-        for row in cursor:
-            print("| Song: ", row[0], end=" | ")
-            print("Artist: ", row[1], end=" | ")
-            print("Genre: ", row[2], end=" | ")
-            print("Album: ", row[3], end=" | ")
-            print("Length: ", row[4], " |")
+        print("")
 
         # Album sort end
 
     elif (answer == "e"):
-        print("Do you want to:")
-        print("a) Sort from A - Z")
-        print("b) Sort from Z - A")
-        answer2 = input("> ")
-        
-        if (answer2 == "a"):
-            cursor.execute('SELECT songName, artistName, genre, album, length FROM songs ORDER BY length ASC')
-            
-
-        elif (answer2 == "b"):
-            cursor.execute('SELECT songName, artistName, genre, album, length FROM songs ORDER BY length DESC')
-            
-
-        else:
-            print("Invalid entry.")
-            print("Would you like to try again?")
-            print(" a) Yes")
-            print(" b) No")
-            answer = input("> ")
-
-            if (answer == "a"):
-                sortSongs()
-                    
-            elif (answer == "b"):
-                songMain()
-                    
-            else:
-                print("Invalid entry.")
-                print("Returning to menu.")
-                songMain()
-
-        for row in cursor:
-            print("| Song: ", row[0], end=" | ")
-            print("Artist: ", row[1], end=" | ")
-            print("Genre: ", row[2], end=" | ")
-            print("Album: ", row[3], end=" | ")
-            print("Length: ", row[4], " |")
+        print("")
 
         # Length sort end
 
@@ -525,26 +460,20 @@ def sortSongs():
 
 def playlist():
     print("")
-    print("Enter playlist name:")
-    playlistName = input("> ")
 
-    repeat = True
-    songIndex = 0
 
-    print("")
-    print("While adding songs to the playlist")
-    print("type \'exit\' at any time to return to the menu")
-    print("or type \'finish\' if you have finished entering")
-    print("songs into the playlist.")
+    """
+
+    songList = open("songs.txt","r").read()
+    songList = ast.literal_eval(songList)
     
-    while (repeat = True):
-        print("")
-        print("Input song name (case sensitive):")
-        songName[songIndex] = input("> ")
+    songListLength = len(songList)
 
-        if cursor.execute("SELECT songName FROM songs WHERE songName = ?",(songName[songIndex]
-        
     
+    if ("The Black Hit Of Space" in songList[0]):
+        print(songList[0].index("The Black Hit Of Space"))
+    
+    """
     songMain()
 
 
@@ -553,18 +482,11 @@ def editAccount():
     songMain()
 
 
-def searchSongs():
-    songMain()
-
-
 print("")
 print("Welcome to The Music Program.")
 
 
-db = sqlite3.connect('spotify.db')
-
-cursor = db.cursor()
 
 main()
 
-db.close()
+
