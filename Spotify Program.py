@@ -1,6 +1,7 @@
 
 import ast
 import sqlite3
+import os
 
 
 # Example of a function
@@ -32,7 +33,6 @@ def main():
         main()
 
 
-
 def register():
     userList = open("users.txt","r").read()
     userList = ast.literal_eval(userList)
@@ -43,24 +43,19 @@ def register():
     print("If you would like to exit the sign up process at any time,")
     print("simply type \'exit\' at any time.")
 
-
     
     def registerName():
         
 
-
         def registerUser():
-
 
 
             def registerEmail():
                 
 
-
                 def registerPassword():
 
-
-                    
+  
                     def registerAdd():
                         userList[0].append(newName)
                         userList[1].append(newUser)
@@ -82,7 +77,6 @@ def register():
                         #registerAdd end
 
 
-
                     print("")
                     newPassword = input("Please enter your password here:")
 
@@ -100,9 +94,7 @@ def register():
                             registerAdd()
 
                         
-
                     #registerPassword end
-
 
 
                 print("")
@@ -117,7 +109,6 @@ def register():
                 
                 #registerEmail end
 
-                
 
             print("")
             newUser = input("Please enter your username here:")
@@ -138,7 +129,6 @@ def register():
             #registerUser end
 
 
-
         print("")
         newName = input("Please enter your name here:")
         
@@ -150,11 +140,9 @@ def register():
         #registerName end
 
 
-
     registerName()
 
     #register end
-
 
 
 def login():
@@ -216,7 +204,6 @@ def login():
             main()
 
 
-
 def songMain():
     print("")
     print("Would you like to:")
@@ -224,9 +211,9 @@ def songMain():
     print("b) Sort all songs")
     print("c) Create, edit or sort playlists")
     print("d) Edit account details")
-    print("e) Sign out")
+    print("e) Search for a song")
+    print("f) Sign out")
     answer = input("> ")
-
 
     
     if (answer == "a"):
@@ -242,6 +229,9 @@ def songMain():
         editAccount()
 
     elif (answer == "e"):
+        searchSongs()
+
+    elif (answer == "f"):
         print("Signing out...")
         print("Returning to main menu.")
         main()
@@ -276,11 +266,6 @@ def listSongs():
 
 
 def sortSongs():
-    songList = open("songs.txt","r").read()
-    songList = ast.literal_eval(songList)
-    
-    songListLength = len(songList)
-    songListIndex = 0
     
     print("")
     print("Do you want to list songs by:")
@@ -462,8 +447,8 @@ def sortSongs():
 
     elif (answer == "e"):
         print("Do you want to:")
-        print("a) Sort from A - Z")
-        print("b) Sort from Z - A")
+        print("a) Sort from low - high")
+        print("b) Sort from high - low")
         answer2 = input("> ")
         
         if (answer2 == "a"):
@@ -532,6 +517,23 @@ def playlist():
     print("c) View a playlist")
     print("d) Return to menu")
     answer = input("> ")
+
+    
+    if (answer == "a"):
+        playlistCreate()
+        
+    elif (answer == "b"):
+        playlistEdit()
+
+    elif (answer == "c"):
+        playlistView()
+
+    elif (answer == "d"):
+        songMain()
+        
+    else:
+        print("Invalid input.")
+        playlist()
     
     
         
@@ -539,6 +541,9 @@ def playlist():
 
 
 def playlistCreate():
+    print("")
+    print("WARNING: If you create a playlist with the same name")
+    print("as one that already exists, the old one will be overwritten.")
     print("")
     print("Enter playlist name:")
     playlistName = input("> ")
@@ -558,23 +563,255 @@ def playlistCreate():
         print("Input song name (case sensitive):")
         playlistAdd[songIndex] = input("> ")
 
-        if cursor.execute("SELECT songName FROM songs WHERE songName = ?",(playlistAdd[songIndex],)):
-            if (playlistAdd[songIndex] == "exit"):
-                songMain()
+        if (playlistAdd[songIndex] == "exit"):
+            songMain()
 
-            elif (playlistAdd[songIndex] == 'finish'):
-                repeat = False
+        elif (playlistAdd[songIndex] == 'finish'):
+            playlistAdd[songIndex] = ""
+            
+            repeat = False
 
-            elif (len(playlistAdd) >= 25):
+        elif (cursor.execute("SELECT songName FROM songs WHERE songName = ?",(playlistAdd[songIndex],)).fetchone()):
+            if (songIndex >= 24):
                 print("Song limit reached.")
                 repeat = False
 
             else:
                 songIndex = songIndex + 1
 
+        else:
+            print("Invalid song name.")
+
+
+    if (songIndex < 24):
+        songIndex = songIndex - 1
+
+    
+    newPlaylist = sqlite3.connect(playlistName + '.db')
+
+    playlistCursor = newPlaylist.cursor()
+
+    playlistCursor.execute('DROP TABLE IF EXISTS songs')
+
+    playlistCursor.execute('CREATE TABLE IF NOT EXISTS songs(id INTEGER PRIMARY KEY, songName TEXT, artistName TEXT, genre TEXT, album TEXT, length TEXT)')
+
+    addIndex = 0
+
+    while (addIndex < songIndex + 1):
+        song = playlistAdd[addIndex]
+       
+        cursor.execute('SELECT songName, artistName, genre, album, length FROM songs WHERE songName = ?', (song,))
+        
+        for row in cursor:
+            songName = row[0]
+            artistName = row[1]
+            genre = row[2]
+            album = row[3]
+            length = row[4]
+            
+
+        playlistCursor.execute('INSERT INTO songs(songName, artistName, genre, album, length) VALUES (?, ?, ?, ?, ?)', (songName, artistName, genre, album, length))
+
+        newPlaylist.commit()
+        
+        addIndex = addIndex + 1
+
+    
+    playlistCursor.execute('SELECT songName, artistName, genre, album, length FROM songs')
+
+    print("")
+
+    for row in playlistCursor:
+        print("| Song: ", row[0], end=" | ")
+        print("Artist: ", row[1], end=" | ")
+        print("Genre: ", row[2], end=" | ")
+        print("Album: ", row[3], end=" | ")
+        print("Length: ", row[4], " |")
+    
+
+    newPlaylist.close()
+
+    playlist()
+
+
+def playlistEdit():
+    print("")
+    print("Do you want to:")
+    print("a) Add a song to a playlist")
+    print("b) Remove a song from a playlist")
+    print("c) Return to menu")
+    answer = input("> ")
+
+    if (answer == "a"):
+        playlistAdd()
+        
+    elif (answer == "b"):
+        playlistRemove()
+
+    elif (answer == "c"):
+        playlist()
+
+    else:
+        print("Invalid input.")
+        playlistEdit()
+
+
+def playlistAdd():
+    print("")
+
+    playlistName = input("Enter playlist name:")
+
+    if os.path.isfile(playlistName + '.db'):
+        pass
+
+    else:
+        print("That playlist does not exist.")
+        playlistEdit()
+
+    playlistDB = sqlite3.connect(playlistName + '.db')
+
+    playlistCursor = playlistDB.cursor()
+
+    print("While adding a song to a playlist")
+    print("type \'exit\' at any time to return to the menu.")
+
+    repeat = True
+    
+    while (repeat == True):
+        print("")
+        print("Enter song name (case sensitive):")
+        song = input("> ")
+
+        if (song == "exit"):
+            playlistEdit()
+
+        elif (cursor.execute("SELECT songName FROM songs WHERE songName = ?",(song,)).fetchone()):
+            repeat = False
+
+        else:
+            print("Invalid song name.")
+
+    cursor.execute('SELECT songName, artistName, genre, album, length FROM songs WHERE songName = ?', (song,))
+        
+    for row in cursor:
+        songName = row[0]
+        artistName = row[1]
+        genre = row[2]
+        album = row[3]
+        length = row[4]
+            
+
+    playlistCursor.execute('INSERT INTO songs(songName, artistName, genre, album, length) VALUES (?, ?, ?, ?, ?)', (songName, artistName, genre, album, length))
+
+    playlistDB.commit()
+
+    playlistCursor.execute('SELECT songName, artistName, genre, album, length FROM songs')
+
+    print("")
+
+    for row in playlistCursor:
+        print("| Song: ", row[0], end=" | ")
+        print("Artist: ", row[1], end=" | ")
+        print("Genre: ", row[2], end=" | ")
+        print("Album: ", row[3], end=" | ")
+        print("Length: ", row[4], " |")
+
+    playlistDB.close()
+    
+    playlistEdit()
+
+
+def playlistRemove():
+    print("")
+
+    playlistName = input("Enter playlist name:")
+
+    if os.path.isfile(playlistName + '.db'):
+        pass
+
+    else:
+        print("That playlist does not exist.")
+        playlistEdit()
+
+
+    playlistDB = sqlite3.connect(playlistName + '.db')
+
+    playlistCursor = playlistDB.cursor()
+
+    print("While adding a song to a playlist")
+    print("type \'exit\' at any time to return to the menu.")
+
+    repeat = True
+    
+    while (repeat == True):
+        print("")
+        print("Enter song name (case sensitive):")
+        song = input("> ")
+
+        if (song == "exit"):
+            playlistEdit()
+
+        elif (playlistCursor.execute("SELECT songName FROM songs WHERE songName = ?",(song,)).fetchone()):
+            repeat = False
+
+        else:
+            print("Invalid song name.")
+
+    playlistCursor.execute('DELETE FROM songs WHERE songName = ?', (song,))
+
+    playlistDB.commit()
+
+    playlistCursor.execute('SELECT songName, artistName, genre, album, length FROM songs')
+
+    print("")
+
+    for row in playlistCursor:
+        print("| Song: ", row[0], end=" | ")
+        print("Artist: ", row[1], end=" | ")
+        print("Genre: ", row[2], end=" | ")
+        print("Album: ", row[3], end=" | ")
+        print("Length: ", row[4], " |")
+
+    playlistDB.close()
+    
+    playlistEdit()
+
+
+
+def playlistView():
+    print("")
+    playlistName = input("Enter playlist name:")
+
+    if os.path.isfile(playlistName + '.db'):
+        pass
+
+    else:
+        print("That playlist does not exist.")
+        playlist()
+    
+    playlistDB = sqlite3.connect(playlistName + '.db')
+
+    playlistCursor = playlistDB.cursor()
+
+    playlistCursor.execute('SELECT songName, artistName, genre, album, length FROM songs')
+
+    print("")
+
+    for row in playlistCursor:
+        print("| Song: ", row[0], end=" | ")
+        print("Artist: ", row[1], end=" | ")
+        print("Genre: ", row[2], end=" | ")
+        print("Album: ", row[3], end=" | ")
+        print("Length: ", row[4], " |")
+
+    
+
+    playlistDB.close()
+
+    playlist()
+
 
 def editAccount():
-    print("")
     songMain()
 
 
