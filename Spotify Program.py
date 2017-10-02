@@ -117,8 +117,7 @@ def register():
             if (newUser == "exit"):
                 main()
         
-            elif (newUser in userList[1]
-                  ):
+            elif (newUser in userList[1]):
                 print("Unfortunately, that username already exists.")
                 print("Please try another username.")
                 registerUser()
@@ -241,7 +240,6 @@ def songMain():
         songMain()
 
 
-
 def listSongs():
     print("")
     print("Listing songs:")
@@ -255,14 +253,9 @@ def listSongs():
         print("Genre: ", row[2], end=" | ")
         print("Album: ", row[3], end=" | ")
         print("Length: ", row[4], " |")
-    
-    
-    
-        
 
     
     songMain()
-
 
 
 def sortSongs():
@@ -284,11 +277,9 @@ def sortSongs():
         
         if (answer2 == "a"):
             cursor.execute('SELECT songName, artistName, genre, album, length FROM songs ORDER BY songName ASC')
-            
 
         elif (answer2 == "b"):
             cursor.execute('SELECT songName, artistName, genre, album, length FROM songs ORDER BY songName DESC')
-            
 
         else:
             print("Invalid entry.")
@@ -308,6 +299,7 @@ def sortSongs():
                 print("Returning to menu.")
                 songMain()
 
+
         for row in cursor:
             print("| Song: ", row[0], end=" | ")
             print("Artist: ", row[1], end=" | ")
@@ -315,7 +307,9 @@ def sortSongs():
             print("Album: ", row[3], end=" | ")
             print("Length: ", row[4], " |")
 
+
         # Name sort end
+
 
     elif (answer == "b"):
         print("Do you want to:")
@@ -326,11 +320,9 @@ def sortSongs():
         if (answer2 == "a"):
             cursor.execute('SELECT songName, artistName, genre, album, length FROM songs ORDER BY artistName, album ASC')
             
-
         elif (answer2 == "b"):
             cursor.execute('SELECT songName, artistName, genre, album, length FROM songs ORDER BY artistName, album DESC')
             
-
         else:
             print("Invalid entry.")
             print("Would you like to try again?")
@@ -349,19 +341,17 @@ def sortSongs():
                 print("Returning to menu.")
                 songMain()
 
+
         for row in cursor:
             print("| Song: ", row[0], end=" | ")
             print("Artist: ", row[1], end=" | ")
             print("Genre: ", row[2], end=" | ")
             print("Album: ", row[3], end=" | ")
             print("Length: ", row[4], " |")
-            
-        
-                    
 
-        
 
         # Artist sort end
+
 
     elif (answer == "c"):
         print("Do you want to:")
@@ -372,11 +362,9 @@ def sortSongs():
         if (answer2 == "a"):
             cursor.execute('SELECT songName, artistName, genre, album, length FROM songs ORDER BY genre, artistName, album ASC')
             
-
         elif (answer2 == "b"):
             cursor.execute('SELECT songName, artistName, genre, album, length FROM songs ORDER BY genre, artistName, album DESC')
             
-
         else:
             print("Invalid entry.")
             print("Would you like to try again?")
@@ -395,6 +383,7 @@ def sortSongs():
                 print("Returning to menu.")
                 songMain()
 
+
         for row in cursor:
             print("| Song: ", row[0], end=" | ")
             print("Artist: ", row[1], end=" | ")
@@ -402,7 +391,9 @@ def sortSongs():
             print("Album: ", row[3], end=" | ")
             print("Length: ", row[4], " |")
 
+
         # Genre sort end
+
 
     elif (answer == "d"):
         print("Do you want to:")
@@ -413,11 +404,9 @@ def sortSongs():
         if (answer2 == "a"):
             cursor.execute('SELECT songName, artistName, genre, album, length FROM songs ORDER BY album ASC')
             
-
         elif (answer2 == "b"):
             cursor.execute('SELECT songName, artistName, genre, album, length FROM songs ORDER BY album DESC')
             
-
         else:
             print("Invalid entry.")
             print("Would you like to try again?")
@@ -436,12 +425,14 @@ def sortSongs():
                 print("Returning to menu.")
                 songMain()
 
+
         for row in cursor:
             print("| Song: ", row[0], end=" | ")
             print("Artist: ", row[1], end=" | ")
             print("Genre: ", row[2], end=" | ")
             print("Album: ", row[3], end=" | ")
             print("Length: ", row[4], " |")
+
 
         # Album sort end
 
@@ -454,11 +445,9 @@ def sortSongs():
         if (answer2 == "a"):
             cursor.execute('SELECT songName, artistName, genre, album, length FROM songs ORDER BY length ASC')
             
-
         elif (answer2 == "b"):
             cursor.execute('SELECT songName, artistName, genre, album, length FROM songs ORDER BY length DESC')
             
-
         else:
             print("Invalid entry.")
             print("Would you like to try again?")
@@ -477,12 +466,14 @@ def sortSongs():
                 print("Returning to menu.")
                 songMain()
 
+
         for row in cursor:
             print("| Song: ", row[0], end=" | ")
             print("Artist: ", row[1], end=" | ")
             print("Genre: ", row[2], end=" | ")
             print("Album: ", row[3], end=" | ")
             print("Length: ", row[4], " |")
+
 
         # Length sort end
 
@@ -509,7 +500,6 @@ def sortSongs():
 
 
 def playlist():
-
     print("")
     print("Do you want to:")
     print("a) Create a playlist")
@@ -536,10 +526,6 @@ def playlist():
         playlist()
     
     
-        
-    
-
-
 def playlistCreate():
     print("")
     print("WARNING: If you create a playlist with the same name")
@@ -565,6 +551,7 @@ def playlistCreate():
 
         if (playlistAdd[songIndex] == "exit"):
             songMain()
+            repeat = False
 
         elif (playlistAdd[songIndex] == 'finish'):
             playlistAdd[songIndex] = ""
@@ -684,12 +671,14 @@ def playlistAdd():
 
         if (song == "exit"):
             playlistEdit()
+            repeat = False
 
         elif (cursor.execute("SELECT songName FROM songs WHERE songName = ?",(song,)).fetchone()):
             repeat = False
 
         else:
             print("Invalid song name.")
+
 
     cursor.execute('SELECT songName, artistName, genre, album, length FROM songs WHERE songName = ?', (song,))
         
@@ -715,6 +704,7 @@ def playlistAdd():
         print("Genre: ", row[2], end=" | ")
         print("Album: ", row[3], end=" | ")
         print("Length: ", row[4], " |")
+
 
     playlistDB.close()
     
@@ -750,12 +740,14 @@ def playlistRemove():
 
         if (song == "exit"):
             playlistEdit()
+            repeat = False
 
         elif (playlistCursor.execute("SELECT songName FROM songs WHERE songName = ?",(song,)).fetchone()):
             repeat = False
 
         else:
             print("Invalid song name.")
+
 
     playlistCursor.execute('DELETE FROM songs WHERE songName = ?', (song,))
 
@@ -771,6 +763,7 @@ def playlistRemove():
         print("Genre: ", row[2], end=" | ")
         print("Album: ", row[3], end=" | ")
         print("Length: ", row[4], " |")
+
 
     playlistDB.close()
     
@@ -788,7 +781,8 @@ def playlistView():
     else:
         print("That playlist does not exist.")
         playlist()
-    
+
+
     playlistDB = sqlite3.connect(playlistName + '.db')
 
     playlistCursor = playlistDB.cursor()
@@ -804,7 +798,6 @@ def playlistView():
         print("Album: ", row[3], end=" | ")
         print("Length: ", row[4], " |")
 
-    
 
     playlistDB.close()
 
