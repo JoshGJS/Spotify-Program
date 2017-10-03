@@ -165,8 +165,8 @@ def login():
             print("The username or password you entered is incorrect, please try again.")
             print("")
             print("Would you like to re-enter your username and password?")
-            print(" a) Yes")
-            print(" b) No")
+            print("a) Yes")
+            print("b) No")
             answer = input("> ")
 
 
@@ -209,8 +209,8 @@ def songMain():
     print("a) List songs")
     print("b) Sort all songs")
     print("c) Create, edit or sort playlists")
-    print("d) Edit account details")
-    print("e) Search for a song")
+    print("d) Search for a song")
+    print("e) Edit account details")
     print("f) Sign out")
     answer = input("> ")
 
@@ -225,10 +225,10 @@ def songMain():
         playlist()
 
     elif (answer == "d"):
-        editAccount()
+        searchSongs()
 
     elif (answer == "e"):
-        searchSongs()
+        editAccount()
 
     elif (answer == "f"):
         print("Signing out...")
@@ -804,12 +804,111 @@ def playlistView():
     playlist()
 
 
+def searchSongs():
+    print("")
+    print("Do you want to:")
+    print("a) Search all songs")
+    print("b) Search by playlist")
+    print("c) Return to menu")
+    answer = input("> ")
+
+    if (answer == 'a'):
+        print("")
+        print("Enter song name or type \'exit\' to return to menu.")
+        repeat = True
+    
+        while (repeat == True):
+            print("")
+            print("Enter song name (case sensitive):")
+            song = input("> ")
+
+            if (song == "exit"):
+                songMain()
+                repeat = False
+
+            elif (cursor.execute("SELECT songName FROM songs WHERE songName = ?",(song,)).fetchone()):
+                repeat = False
+
+            else:
+                print("Invalid song name.")
+
+
+        cursor.execute("SELECT songName, artistName, genre, album, length FROM songs WHERE songName = ?", (song,))
+
+        print("")
+
+        for row in cursor:
+            print("| Song: ", row[0], end=" | ")
+            print("Artist: ", row[1], end=" | ")
+            print("Genre: ", row[2], end=" | ")
+            print("Album: ", row[3], end=" | ")
+            print("Length: ", row[4], " |")
+
+        songMain()
+        
+
+    elif (answer == 'b'):
+        print("")
+
+        playlistName = input("Enter playlist name:")
+
+        if os.path.isfile(playlistName + '.db'):
+            pass
+
+        else:
+            print("That playlist does not exist.")
+            searchSongs()
+
+        playlistDB = sqlite3.connect(playlistName + '.db')
+
+        playlistCursor = playlistDB.cursor()
+
+        playlistCursor.execute('SELECT songName, artistName, genre, album, length FROM songs')
+        
+        print("")
+        print("Enter song name or type \'exit\' to return to menu.")
+        repeat = True
+    
+        while (repeat == True):
+            print("")
+            print("Enter song name (case sensitive):")
+            song = input("> ")
+
+            if (song == "exit"):
+                songMain()
+                repeat = False
+
+            elif (playlistCursor.execute("SELECT songName FROM songs WHERE songName = ?",(song,)).fetchone()):
+                repeat = False
+
+            else:
+                print("Invalid song name.")
+
+
+        playlistCursor.execute("SELECT songName, artistName, genre, album, length FROM songs WHERE songName = ?", (song,))
+
+        print("")
+
+        for row in playlistCursor:
+            print("| Song: ", row[0], end=" | ")
+            print("Artist: ", row[1], end=" | ")
+            print("Genre: ", row[2], end=" | ")
+            print("Album: ", row[3], end=" | ")
+            print("Length: ", row[4], " |")
+
+        songMain()
+
+    elif (answer == 'c'):
+        songMain()
+
+    else:
+        print("Invalid input.")
+        songMain()
+
+
 def editAccount():
     songMain()
 
-
-def searchSongs():
-    songMain()
 
 
 print("")
