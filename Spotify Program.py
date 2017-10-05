@@ -4,16 +4,16 @@ import sqlite3
 import os
 
 
-# Example of a function
+# Example of a function/subroutine
 def main():
     print("")
-    print("Would you like to:")
+    print("Would you like to:") # Example of a string
     print("a) Sign in")
     print("b) Sign up")
     print("c) End program")
-    answer = input("> ") # Example of a variable
+    answer = input("> ") # Example of a (local) variable and assignment
 
-    # Example of an if else statement
+    # Example of an if else statement/selection
     if (answer == "a"):
         login()
         
@@ -24,6 +24,7 @@ def main():
         pass
 
     elif (answer == "x"):
+        # Example of variable declaration and a global variable
         global userLogin
         userLogin = "jigglyJ"
         songMain()
@@ -247,6 +248,7 @@ def listSongs():
 
     cursor.execute('SELECT songName, artistName, genre, album, length FROM songs')
 
+    #Example of for loop/iteration
     for row in cursor:
         print("| Song: ", row[0], end=" | ")
         print("Artist: ", row[1], end=" | ")
@@ -534,16 +536,17 @@ def playlistCreate():
     print("Enter playlist name:")
     playlistName = input("> ")
 
-    repeat = True
-    songIndex = 0
-    playlistAdd = [""] * 25
+    repeat = True # Example of a boolean
+    songIndex = 0 # Example of an integer
+    playlistAdd = [""] * 25 # Example of an array
 
     print("")
     print("While adding songs to the playlist")
     print("type \'exit\' at any time to return to the menu")
     print("or type \'finish\' if you have finished entering")
     print("songs into the playlist.")
-    
+
+    # Example of while loop
     while (repeat == True):
         print("")
         print("Input song name (case sensitive):")
@@ -564,6 +567,7 @@ def playlistCreate():
                 repeat = False
 
             else:
+                # Example of addition
                 songIndex = songIndex + 1
 
         else:
@@ -907,8 +911,161 @@ def searchSongs():
 
 
 def editAccount():
+    print("")
+    print("Do you want to:")
+    print("a) Change your username")
+    print("b) Change your password")
+    print("c) Change your name")
+    print("d) Change your email")
+    print("e) Return to menu")
+    answer = input("> ")
+
+    if (answer == "a"):
+        editUser()
+
+    elif (answer == "b"):
+        editPassword()
+
+    elif (answer == "c"):
+        editName()
+
+    elif (answer == "d"):
+        editEmail()
+
+    elif (answer == "e"):
+        songMain()
+
+    else:
+        print("Invalid input.")
+        editAccount()
+    
     songMain()
 
+
+def editUser():
+    userList = open("users.txt","r").read()
+    userList = ast.literal_eval(userList)
+    userIndex = userList[1].index(userLogin)
+    
+    print("")
+    print("Type \'exit\' at any time to return to menu.")
+    password = input("Enter password: ")
+
+    if (password == 'exit'):
+        editAccount()
+
+    elif (password == userList[3][userIndex]):
+        newUser = input("Enter new username: ")
+        
+        userList[1][userIndex] = newUser
+        
+        userAdd = open("users.txt","w")
+        userAdd.write(str(userList))
+        userAdd.close()
+
+        editAccount()
+
+    else:
+        print("Incorrect password")
+        editUser()
+
+
+def editPassword():
+    userList = open("users.txt","r").read()
+    userList = ast.literal_eval(userList)
+    userIndex = userList[1].index(userLogin)
+    
+    print("")
+    print("Type \'exit\' at any time to return to menu.")
+    password = input("Enter password: ")
+
+    if (password == 'exit'):
+        editAccount()
+
+    elif (password == userList[3][userIndex]):
+        def newPassword():
+            newPassword = input("Enter new password: ")
+
+            if (newPassword == 'exit'):
+                editAccount()
+            
+            newPasswordConfirm = input("Please re-enter your new password: ")
+
+            if (newPasswordConfirm == 'exit'):
+                editAccount()
+
+            elif (newPassword == newPasswordConfirm):
+                userList[3][userIndex] = newPassword
+                
+                userAdd = open("users.txt","w")
+                userAdd.write(str(userList))
+                userAdd.close()
+
+                editAccount()
+
+            else:
+                print("Passwords do not match.")
+                newPassword()
+
+    else:
+        print("Incorrect password")
+        editPassword()
+
+
+def editName():
+    userList = open("users.txt","r").read()
+    userList = ast.literal_eval(userList)
+    userIndex = userList[1].index(userLogin)
+    
+    print("")
+    print("Type \'exit\' at any time to return to menu.")
+    password = input("Enter password: ")
+
+    if (password == 'exit'):
+        editAccount()
+
+    elif (password == userList[3][userIndex]):
+        newName = input("Enter new name: ")
+        
+        userList[0][userIndex] = newName
+        
+        userAdd = open("users.txt","w")
+        userAdd.write(str(userList))
+        userAdd.close()
+
+        editAccount()
+
+    else:
+        print("Incorrect password")
+        editName()
+
+
+def editEmail():
+    userList = open("users.txt","r").read()
+    userList = ast.literal_eval(userList)
+    userIndex = userList[1].index(userLogin)
+    
+    print("")
+    print("Type \'exit\' at any time to return to menu.")
+    password = input("Enter password: ")
+
+    if (password == 'exit'):
+        editAccount()
+
+    elif (password == userList[3][userIndex]):
+        newEamil = input("Enter new E-mail: ")
+        
+        userList[2][userIndex] = newEmail
+        
+        userAdd = open("users.txt","w")
+        userAdd.write(str(userList))
+        userAdd.close()
+
+        editAccount()
+
+    else:
+        print("Incorrect password")
+        editEmail()
 
 
 print("")
