@@ -45,6 +45,7 @@ def register():
     print("simply type \'exit\' at any time.")
 
     
+    
     def registerName():
         
 
@@ -105,8 +106,13 @@ def register():
                 if (newEmail == "exit"):
                     main()
 
+                elif ("@" in newEmail and "." in newEmail and " " not in newEmail and newEmail.count("@") == 1):
+                        registerPassword() 
+
                 else:
-                    registerPassword()
+                    print("Invalid E-mail.")
+                    registerEmail()
+                    
                 
                 #registerEmail end
 
@@ -1071,6 +1077,7 @@ def editEmail():
 print("")
 print("Welcome to The Music Program.")
 
+verifyArray = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",".","_","-"," "]
 
 db = sqlite3.connect('spotify.db')
 
