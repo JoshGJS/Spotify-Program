@@ -82,6 +82,11 @@ def register():
                     print("")
                     newPassword = input("Please enter your password here:")
 
+                    for character in newPassword:
+                        if character not in verifyArray:
+                            print("Invalid input.")
+                            registerPassword()
+
                     if (newPassword == "exit"):
                         main()
 
@@ -92,8 +97,13 @@ def register():
                         if (newPasswordVerify == "exit"):
                             main()
 
-                        else:
+                        elif (newPasswordVerify == newPassword):
                             registerAdd()
+
+                        else:
+                            print("Passwords do not match.")
+                            print("Please re-enter password.")
+                            registerPassword()
 
                         
                     #registerPassword end
@@ -102,6 +112,11 @@ def register():
                 print("")
                 newEmail = input("Please enter your e-mail here:")
 
+                for character in newEmail:
+                    if character not in verifyArray:
+                        print("Invalid input.")
+                        registerEmail()
+                
                 
                 if (newEmail == "exit"):
                     main()
@@ -120,6 +135,11 @@ def register():
             print("")
             newUser = input("Please enter your username here:")
 
+            for character in newUser:
+                if character not in verifyArray:
+                    print("Invalid input.")
+                    registerUser()
+            
 
             if (newUser == "exit"):
                 main()
@@ -137,9 +157,16 @@ def register():
 
         print("")
         newName = input("Please enter your name here:")
+
+        for character in newName:
+            if character not in verifyArray:
+                print("Invalid input.")
+                registerName()
+        
         
         if (newName == "exit"):
             main()
+            
         else:
             registerUser()
 
@@ -541,6 +568,12 @@ def playlistCreate():
     print("")
     print("Enter playlist name:")
     playlistName = input("> ")
+
+    for character in playlistName:
+        if character not in verifyArray:
+            print("Invalid input.")
+            registerCreate()
+
 
     repeat = True # Example of a boolean
     songIndex = 0 # Example of an integer
@@ -962,6 +995,12 @@ def editUser():
 
     elif (password == userList[3][userIndex]):
         newUser = input("Enter new username: ")
+
+        for character in newUser:
+            if character not in verifyArray:
+                print("Invalid input.")
+                editUser()
+                
         
         userList[1][userIndex] = newUser
         
@@ -991,6 +1030,12 @@ def editPassword():
     elif (password == userList[3][userIndex]):
         def newPassword():
             newPassword = input("Enter new password: ")
+
+            for character in newPassword:
+                if character not in verifyArray:
+                    print("Invalid input.")
+                    editPassword()
+            
 
             if (newPassword == 'exit'):
                 editAccount()
@@ -1032,6 +1077,12 @@ def editName():
 
     elif (password == userList[3][userIndex]):
         newName = input("Enter new name: ")
+
+        for character in newName:
+            if character not in verifyArray:
+                print("Invalid input.")
+                editName()
+        
         
         userList[0][userIndex] = newName
         
@@ -1060,14 +1111,25 @@ def editEmail():
 
     elif (password == userList[3][userIndex]):
         newEamil = input("Enter new E-mail: ")
-        
-        userList[2][userIndex] = newEmail
-        
-        userAdd = open("users.txt","w")
-        userAdd.write(str(userList))
-        userAdd.close()
 
-        editAccount()
+        for character in newEmail:
+            if character not in verifyArray:
+                print("Invalid input.")
+                editEmail()
+
+        if ("@" in newEmail and "." in newEmail and " " not in newEmail and newEmail.count("@") == 1):
+            userList[2][userIndex] = newEmail
+        
+            userAdd = open("users.txt","w")
+            userAdd.write(str(userList))
+            userAdd.close()
+
+            editAccount()
+
+        else:
+            print("Invalid input.")
+            editEmail()
+        
 
     else:
         print("Incorrect password")
@@ -1077,7 +1139,7 @@ def editEmail():
 print("")
 print("Welcome to The Music Program.")
 
-verifyArray = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",".","_","-"," "]
+verifyArray = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",".","_","-","@"," "]
 
 db = sqlite3.connect('spotify.db')
 
